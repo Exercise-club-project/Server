@@ -9,6 +9,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -24,11 +26,19 @@ public class UserService {
         .password(passwordEncoder.encode(userRegisterDto.getPassword()))
         .name(userRegisterDto.getName())
         .sex(userRegisterDto.getSex())
-        .birthDate(userRegisterDto.getBirth_date())
-        .phoneNumber(userRegisterDto.getPhone_number())
+        .birthDate(userRegisterDto.getBirthDate())
+        .phoneNumber(userRegisterDto.getPhoneNumber())
         .role(userRegisterDto.getRole())
         .build());
 
         return new ResponseDto("SUCCESS", user.getUserId());
+    }
+
+    public ResponseDto checkEmail(String email) {
+        boolean result = userRepository.existsByEmail(email);
+        if(result){
+            return new ResponseDto("SUCCESS","이메일이 중복됩니다.");
+        }
+        return new ResponseDto("SUCCESS","사용가능한 이메일입니다.");
     }
 }
