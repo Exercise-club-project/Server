@@ -28,7 +28,7 @@ public class UserService {
         .sex(userRegisterDto.getSex())
         .birthDate(userRegisterDto.getBirthDate())
         .phoneNumber(userRegisterDto.getPhoneNumber())
-        .role(userRegisterDto.getRole())
+        .role("회원")
         .build());
 
         return new ResponseDto("SUCCESS", user.getUserId());
