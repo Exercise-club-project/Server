@@ -3,12 +3,7 @@ package CapstoneProject.Capstoneproject1.domain.user.dto;
 import lombok.Data;
 
 @Data
-public class UserRegisterDto {
-
+public class UserLoginDto {
     private String email;
     private String password;
-    private String name;
-    private String birthDate;
-    private String sex;
-    private String phoneNumber;
 }

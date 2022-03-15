@@ -4,10 +4,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "user")
@@ -16,7 +20,7 @@ import java.util.Collection;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
+    @Column(name = "id")
     private Long userId;
 
     @Column(name = "email")
@@ -37,23 +41,26 @@ public class User implements UserDetails {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Column(name = "role")
-    private String role;
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles = new ArrayList<>();
 
     @Builder
-    public User(String email, String password, String name, String birthDate, String sex, String phoneNumber, String role){
+    public User(String email, String password, String name, String birthDate, String sex, String phoneNumber,
+                List<String> roles){
         this.email = email;
         this.name = name;
         this.birthDate = birthDate;
         this.password = password;
         this.sex = sex;
         this.phoneNumber = phoneNumber;
-        this.role = role;
+        this.roles = roles;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return getAuthorities();
+        return this.roles.stream()
+               .map(SimpleGrantedAuthority::new)
+               .collect(Collectors.toList());
     }
 
     @Override
