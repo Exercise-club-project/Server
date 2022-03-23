@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.ConditionalOnDefaultWebSecurity;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -18,8 +19,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    @Autowired
-    private JwtAuthenticationProvider jwtAuthenticationProvider;
+
+    private final JwtAuthenticationProvider jwtAuthenticationProvider;
+    private final RedisTemplate redisTemplate;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -34,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/**").permitAll() // css 관련 파일들 접근(사용) 허용(가능)
                 .and()
-                .addFilterBefore(new JwtAuthenticationFilter(jwtAuthenticationProvider)
+                .addFilterBefore(new JwtAuthenticationFilter(jwtAuthenticationProvider, redisTemplate)
                         , UsernamePasswordAuthenticationFilter.class);
     }
 

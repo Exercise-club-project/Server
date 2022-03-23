@@ -2,10 +2,9 @@ package CapstoneProject.Capstoneproject1.domain.user.dto;
 
 import lombok.Data;
 
-
 @Data
-public class UserLoginDto {
-
+public class UserLogoutRequestDto {
     private String email;
-    private String password;
+    private String accessToken;
+    private String refreshToken;
 }

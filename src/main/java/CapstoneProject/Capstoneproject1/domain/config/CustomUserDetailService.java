@@ -1,5 +1,6 @@
 package CapstoneProject.Capstoneproject1.domain.config;
 
+import CapstoneProject.Capstoneproject1.domain.user.domain.User;
 import CapstoneProject.Capstoneproject1.domain.user.domain.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
