@@ -18,8 +18,6 @@ import javax.servlet.ServletRequest;
 public class UserController {
 
     private final UserService userService;
-    private final UserRepository userRepository;
-
     @PostMapping("auth/register")
     @ResponseBody
     public ResponseDto userRegister(@RequestBody UserRegisterDto userRegisterDto){
