@@ -18,8 +18,6 @@ import javax.servlet.ServletRequest;
 public class UserController {
 
     private final UserService userService;
-    private final UserRepository userRepository;
-
     @PostMapping("auth/register")
     @ResponseBody
     public ResponseDto userRegister(@RequestBody UserRegisterDto userRegisterDto){
@@ -32,7 +30,7 @@ public class UserController {
         return userService.checkEmail(email);
     }
 
-    @GetMapping("auth/login")
+    @PostMapping("auth/login")
     @ResponseBody
     public ResponseDto login(@RequestBody UserLoginDto userLoginDto){
         return userService.login(userLoginDto);
