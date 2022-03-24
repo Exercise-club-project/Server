@@ -32,7 +32,7 @@ public class UserController {
         return userService.checkEmail(email);
     }
 
-    @GetMapping("auth/login")
+    @PostMapping("auth/login")
     @ResponseBody
     public ResponseDto login(@RequestBody UserLoginDto userLoginDto){
         return userService.login(userLoginDto);
