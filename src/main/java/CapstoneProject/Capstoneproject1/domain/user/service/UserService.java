@@ -107,10 +107,7 @@ public class UserService {
 
         // 2. 사용자의 "email"값을 이용하여 "Redis"에 저장된 사용자의 "Refresh Token" 조회
         String refreshToken = (String)redisTemplate.opsForValue().get("RT:" + user.getEmail());
-        // 로그아웃되어 "Refresh Token"이 존재하지 않는 경우
-        if(ObjectUtils.isEmpty(refreshToken)){
-            return new ResponseDto("FAIL","로그아웃 되었습니다.");
-        }
+
         // 3. 새로운 토큰 생성
         TokenDto tokenDto = jwtAuthenticationProvider.createToken(user.getName(), user.getRoles());
 
