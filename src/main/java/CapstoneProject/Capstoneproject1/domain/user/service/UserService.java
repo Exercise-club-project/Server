@@ -31,6 +31,9 @@ public class UserService {
 
     @Transactional
     public ResponseDto userRegister(UserRegisterDto userRegisterDto) {
+        if(userRepository.existsByEmail(userRegisterDto.getEmail())){
+            return new ResponseDto("FAIL","이미 가입되어있는 회원입니다.");
+        }
         User user = userRepository.save(User.builder()
                 .email(userRegisterDto.getEmail())
                 .password(passwordEncoder.encode(userRegisterDto.getPassword()))
