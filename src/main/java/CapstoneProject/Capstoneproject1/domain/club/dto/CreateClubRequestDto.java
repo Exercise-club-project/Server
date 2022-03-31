@@ -8,6 +8,4 @@ public class CreateClubRequestDto {
     private String school;
     private Integer peopleNumber;
     private String leader;
-    private String date;
-    private Integer rank;
 }
