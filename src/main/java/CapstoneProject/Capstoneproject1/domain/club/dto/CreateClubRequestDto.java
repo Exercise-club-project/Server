@@ -6,6 +6,5 @@ import lombok.Data;
 public class CreateClubRequestDto {
     private String clubName;
     private String school;
-    private Integer peopleNumber;
     private String leader;
 }

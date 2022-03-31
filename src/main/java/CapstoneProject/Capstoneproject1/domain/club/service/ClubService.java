@@ -4,7 +4,7 @@ import CapstoneProject.Capstoneproject1.domain.ResponseDto;
 import CapstoneProject.Capstoneproject1.domain.club.domain.Club;
 import CapstoneProject.Capstoneproject1.domain.club.domain.ClubRepository;
 import CapstoneProject.Capstoneproject1.domain.club.dto.CreateClubRequestDto;
-import CapstoneProject.Capstoneproject1.domain.club.dto.SearchClubResponseDto;
+import CapstoneProject.Capstoneproject1.domain.club.dto.GetClubResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +26,6 @@ public class ClubService {
         Club club = Club.builder()
                 .clubName(createClubRequestDto.getClubName())
                 .school(createClubRequestDto.getSchool())
-                .peopleNumber(createClubRequestDto.getPeopleNumber())
                 .leader(createClubRequestDto.getLeader())
                 .build();
 
@@ -36,13 +35,13 @@ public class ClubService {
     }
 
     public ResponseDto searchClub(String school) {
-        List<SearchClubResponseDto> result = new ArrayList<>();
+        List<CreateClubRequestDto> result = new ArrayList<>();
 
         List<Club> temp1 = clubRepository.findAllBySchool(school);
 
 
         for(Club c : temp1){
-            SearchClubResponseDto temp2 = new SearchClubResponseDto();
+            CreateClubRequestDto temp2 = new CreateClubRequestDto();
             temp2.setClubName(c.getClubName());
             temp2.setLeader(c.getLeader());
             temp2.setSchool(c.getSchool());
@@ -52,5 +51,18 @@ public class ClubService {
 
         return new ResponseDto("SUCCESS",result);
 
+    }
+
+    public ResponseDto getClub(Long clubId) {
+        Club club = clubRepository.findById(clubId)
+                .orElseThrow(()->new IllegalArgumentException("존재하지 않는 동아리입니다."));
+
+        GetClubResponseDto result = new GetClubResponseDto();
+        result.setClubName(club.getClubName());
+        result.setLeader(club.getLeader());
+        result.setSchool(club.getSchool());
+        result.setNumber(club.getPeopleNumber());
+
+        return new ResponseDto("SUCCESS",result);
     }
 }

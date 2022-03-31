@@ -41,10 +41,9 @@ public class Club {
     private Integer rank;
 
     @Builder
-    public Club(String clubName, String school, Integer peopleNumber, String leader){
+    public Club(String clubName, String school, String leader){
         this.clubName = clubName;
         this.school = school;
-        this.peopleNumber = peopleNumber;
         this.leader = leader;
     }
 }
