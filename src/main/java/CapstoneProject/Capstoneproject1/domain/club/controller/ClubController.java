@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletRequest;
 import java.nio.file.Path;
 
 @Controller
@@ -31,5 +32,11 @@ public class ClubController {
     @ResponseBody
     public ResponseDto getClub(@PathVariable Long groupId){
         return clubService.getClub(groupId);
+    }
+
+    @PostMapping("/user/group/join/{groupId}")
+    @ResponseBody
+    public ResponseDto joinClub(@PathVariable Long groupId, ServletRequest request){
+        return clubService.joinClub(groupId,request);
     }
 }

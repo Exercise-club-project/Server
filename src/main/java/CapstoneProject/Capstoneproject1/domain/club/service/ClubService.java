@@ -5,9 +5,15 @@ import CapstoneProject.Capstoneproject1.domain.club.domain.Club;
 import CapstoneProject.Capstoneproject1.domain.club.domain.ClubRepository;
 import CapstoneProject.Capstoneproject1.domain.club.dto.CreateClubRequestDto;
 import CapstoneProject.Capstoneproject1.domain.club.dto.GetClubResponseDto;
+import CapstoneProject.Capstoneproject1.domain.config.JwtAuthenticationProvider;
+import CapstoneProject.Capstoneproject1.domain.user.domain.User;
+import CapstoneProject.Capstoneproject1.domain.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +22,9 @@ import java.util.List;
 public class ClubService {
 
     private final ClubRepository clubRepository;
+    private final UserRepository userRepository;
+    private final JwtAuthenticationProvider jwtAuthenticationProvider;
+    private final UserDetailsService userDetailsService;
 
     public ResponseDto createClub(CreateClubRequestDto createClubRequestDto) {
 
@@ -26,6 +35,7 @@ public class ClubService {
         Club club = Club.builder()
                 .clubName(createClubRequestDto.getClubName())
                 .school(createClubRequestDto.getSchool())
+                .peopleNumber(0)
                 .leader(createClubRequestDto.getLeader())
                 .build();
 
@@ -64,5 +74,21 @@ public class ClubService {
         result.setNumber(club.getPeopleNumber());
 
         return new ResponseDto("SUCCESS",result);
+    }
+
+    public ResponseDto joinClub(Long clubId, ServletRequest request) {
+        Club club = clubRepository.findById(clubId)
+                .orElseThrow(()->new IllegalArgumentException("존재하지 않는 동아리입니다."));
+
+        String token = jwtAuthenticationProvider.resolveToken((HttpServletRequest) request);
+        User user = (User) userDetailsService.loadUserByUsername(jwtAuthenticationProvider.getUserPk(token));
+
+        user.setClub(club);
+        userRepository.save(user); // 유저 동아리 가입
+
+        club.setPeopleNumber(club.getPeopleNumber()+1); // 동아리 회원 수 증가
+        clubRepository.save(club);
+
+        return new ResponseDto("SUCCESS",club.getClubId());
     }
 }

@@ -1,8 +1,10 @@
 package CapstoneProject.Capstoneproject1.domain.user.domain;
 
+import CapstoneProject.Capstoneproject1.domain.club.domain.Club;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -41,6 +43,10 @@ public class User implements UserDetails {
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    @ManyToOne
+    @JoinColumn(name = "club_id")
+    private Club club;
+
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 
@@ -54,6 +60,10 @@ public class User implements UserDetails {
         this.sex = sex;
         this.phoneNumber = phoneNumber;
         this.roles = roles;
+    }
+
+    public void setClub(Club club){
+        this.club = club;
     }
 
     @Override
