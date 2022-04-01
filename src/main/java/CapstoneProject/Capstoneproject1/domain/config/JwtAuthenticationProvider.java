@@ -1,12 +1,10 @@
 package CapstoneProject.Capstoneproject1.domain.config;
 
 import CapstoneProject.Capstoneproject1.domain.user.dto.TokenDto;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,24 +15,26 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
 @RequiredArgsConstructor
 @Component
+@Slf4j
 public class JwtAuthenticationProvider {
     private String secretKey = "zoqtmxhselwkdls1zoqtmxhselwkdls1zoqtmxhselwkdls1zoqtmxhselwkdls1";
 
-    private static final long ACCESS_TOKEN_EXPIRE_TIME = 7 * 24 * 60 * 60 * 1000L;
-    /* 30 * 60 * 1000L(30분) -> 7 * 24 * 60 * 60 * 1000L(7일) 개발단계에서는 "AT"의 유효 기간을 늘려놓음 */
+    private static final long ACCESS_TOKEN_EXPIRE_TIME = 30 * 60 * 1000L; // 30분
     private static final long REFRESH_TOKEN_EXPIRE_TIME = 7 * 24 * 60 * 60 * 1000L;    // 7일
 
     @Autowired
     private UserDetailsService userDetailsService;
 
     // JWT 토큰 생성
-    public TokenDto createToken(String userName, List<String> roles) {
-        Claims claims = Jwts.claims().setSubject(userName); // JWT payload 에 저장되는 정보단위
+    public TokenDto createToken(String userEmail, List<String> roles) {
+        Claims claims = Jwts.claims().setSubject(userEmail); // JWT payload 에 저장되는 정보단위
+        // "setSubject"를 통해서 "userEmail"을 넣음, 기존에는 이름이였음
         claims.put("roles", roles); // 정보는 key / value 쌍으로 저장된다.
         Date now1 = new Date();
         long now2 = new Date().getTime();
@@ -80,19 +80,28 @@ public class JwtAuthenticationProvider {
                 .getBody().getSubject();
     }
 
-    // "Request"의 "Header"에서 "AccessToken" 값을 가져옵니다. "ACCESS_TOKEN" : "ACCESS_TOKEN"의 값
+    // "Request"의 "Header"에서 "Access_Token" 값을 가져옵니다. "Access_Token" : "Access_Token"의 값
     public String resolveToken(HttpServletRequest request) {
-        return request.getHeader("ACCESS_TOKEN");
+        return request.getHeader("Access_Token");
     }
 
     // 토큰의 유효성 + 만료일자 확인
     public boolean validateToken(String jwtToken) {
         try {
-            Jws<Claims> claims = Jwts.parserBuilder()
-                    .setSigningKey(getSigninKey(secretKey))
-                    .build().parseClaimsJws(jwtToken);
-            return !claims.getBody().getExpiration().before(new Date());
-        } catch (Exception e) {
+            Jwts.parserBuilder().setSigningKey(getSigninKey(secretKey)).build().parseClaimsJws(jwtToken);
+            return true;
+        }
+        catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
+            log.info("Invalid JWT Token", e);
+            return false;
+        } catch (ExpiredJwtException e) {
+            log.info("Expired JWT Token", e);
+            return false;
+        } catch (UnsupportedJwtException e) {
+            log.info("Unsupported JWT Token", e);
+            return false;
+        } catch (IllegalArgumentException e) {
+            log.info("JWT claims string is empty.", e);
             return false;
         }
     }

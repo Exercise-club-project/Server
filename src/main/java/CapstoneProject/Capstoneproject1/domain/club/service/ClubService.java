@@ -81,7 +81,7 @@ public class ClubService {
                 .orElseThrow(()->new IllegalArgumentException("존재하지 않는 동아리입니다."));
 
         String token = jwtAuthenticationProvider.resolveToken((HttpServletRequest) request);
-        User user = (User) userDetailsService.loadUserByUsername(jwtAuthenticationProvider.getUserPk(token));
+        User user = userRepository.findByEmail(jwtAuthenticationProvider.getUserPk(token));
 
         user.setClub(club);
         userRepository.save(user); // 유저 동아리 가입

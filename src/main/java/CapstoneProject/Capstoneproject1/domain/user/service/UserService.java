@@ -63,7 +63,7 @@ public class UserService {
                 return new ResponseDto("FAIL", "비밀번호가 틀렸습니다.");
             }
         // 로그인 할 경우 "AccessToken"과 "RefreshToken"을 "TokenDto"에 넣어 반환
-        TokenDto tokenDto = jwtAuthenticationProvider.createToken(user.getName(), user.getRoles());
+        TokenDto tokenDto = jwtAuthenticationProvider.createToken(user.getEmail(), user.getRoles());
 
         // 생성된 "RefreshToken"를 "Redis"에 저장, 시간이 만료 되면 자동적으로 삭제
         // key 값: "RT:email",

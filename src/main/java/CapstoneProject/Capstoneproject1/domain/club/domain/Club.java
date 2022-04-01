@@ -34,7 +34,7 @@ public class Club {
     private String leader;
 
     @CreatedDate
-    @Column(name = "date")
+    @Column(name = "date") // 동아리 생성 날짜
     private LocalDate date;
 
     @Column(name = "ranking") // "rank"는 데이터베이스에서 이미 사용하는 예약어이기 때문에 "ranking"으로 바꿔줌
