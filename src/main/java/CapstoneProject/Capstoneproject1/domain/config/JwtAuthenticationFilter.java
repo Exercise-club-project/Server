@@ -7,6 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import org.springframework.security.core.Authentication;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -30,12 +31,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String accessToken = jwtAuthenticationProvider.resolveToken(request);
 
         if(accessToken != null && jwtAuthenticationProvider.validateToken(accessToken)){
-            Authentication authentication = jwtAuthenticationProvider.getAuthentication(accessToken);
 
             // "Redis"에 존재하는 Black List Access_Token
-            String blackListAccessToken = (String)redisTemplate.opsForValue().get(accessToken);
-            if(!accessToken.equals(blackListAccessToken)){
+            String isLogout = (String)redisTemplate.opsForValue().get(accessToken);
+            if (ObjectUtils.isEmpty(isLogout)){
                 // 토큰이 유효하거나 "Black List Access_Token"이 아닐 경우 인증 성공
+                Authentication authentication = jwtAuthenticationProvider.getAuthentication(accessToken);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }

@@ -3,13 +3,17 @@ package CapstoneProject.Capstoneproject1.domain.club.domain;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "club")
 @NoArgsConstructor
 @Getter
+@EntityListeners(AuditingEntityListener.class)
 public class Club {
 
     @Id
@@ -29,20 +33,22 @@ public class Club {
     @Column(name = "leader")
     private String leader;
 
-    @Column(name = "date")
-    private String date;
+    @CreatedDate
+    @Column(name = "date") // 동아리 생성 날짜
+    private LocalDate date;
 
-    @Column(name = "ranking") // "rank"는 데이터베이스에서 이미 사용하는 예약어이기 때문에 ranking으로 바꿔줌
+    @Column(name = "ranking") // "rank"는 데이터베이스에서 이미 사용하는 예약어이기 때문에 "ranking"으로 바꿔줌
     private Integer rank;
 
     @Builder
-    public Club(String clubName, String school, Integer peopleNumber, String leader, String date, Integer rank){
+    public Club(String clubName, String school, Integer peopleNumber, String leader){
         this.clubName = clubName;
-        this.school = school;
         this.peopleNumber = peopleNumber;
+        this.school = school;
         this.leader = leader;
-        this.date = date;
-        this.rank = rank;
     }
 
+    public void setPeopleNumber(Integer peopleNumber){
+        this.peopleNumber = peopleNumber;
+    }
 }
