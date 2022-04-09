@@ -26,7 +26,10 @@ public class ClubService {
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
     private final UserDetailsService userDetailsService;
 
-    public ResponseDto createClub(CreateClubRequestDto createClubRequestDto) {
+    public ResponseDto createClub(CreateClubRequestDto createClubRequestDto, ServletRequest request) {
+
+        String token = jwtAuthenticationProvider.resolveToken((HttpServletRequest) request);
+        User user = userRepository.findByEmail(jwtAuthenticationProvider.getUserPk(token));
 
         if(clubRepository.existsByClubName(createClubRequestDto.getClubName())){
             return new ResponseDto("FAIL","이미 존재하는 동아리 이름입니다.");
@@ -35,11 +38,14 @@ public class ClubService {
         Club club = Club.builder()
                 .clubName(createClubRequestDto.getClubName())
                 .school(createClubRequestDto.getSchool())
-                .peopleNumber(0)
+                .peopleNumber(1)
                 .leader(createClubRequestDto.getLeader())
                 .build();
 
         clubRepository.save(club);
+
+        user.setClub(club);
+        userRepository.save(user);
 
         return new ResponseDto("SUCCESS",club.getClubId());
     }
