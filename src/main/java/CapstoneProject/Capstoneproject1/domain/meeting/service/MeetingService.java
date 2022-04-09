@@ -95,4 +95,19 @@ public class MeetingService {
             return new ResponseDto("SUCCESS",result);
     }
 
+    public ResponseDto getMeetingInfo(Long meetingId) {
+
+        Meeting meeting = meetingRepository.getById(meetingId);
+
+        CreateMeetingRequestDto result = CreateMeetingRequestDto.builder()
+                .meetingName(meeting.getMeetingName())
+                .meetingType(meeting.getMeetingType())
+                .startDate(meeting.getStartDate())
+                .endDate(meeting.getEndDate())
+                .description(meeting.getDescription())
+                .build();
+
+        return new ResponseDto("SUCCESS",result);
+
+    }
 }

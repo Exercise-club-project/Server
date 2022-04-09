@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.Servlet;
 import javax.servlet.ServletRequest;
 
 @Controller
@@ -25,6 +26,12 @@ public class MeetingController {
     @ResponseBody
     public ResponseDto searchMeeting(@PathVariable Long groupId, ServletRequest request){
         return meetingService.searchMeeting(groupId,request);
+    }
+
+    @GetMapping("/user/meetingInfo/get/{meetingId}")
+    @ResponseBody
+    public ResponseDto getMeetingInfo(@PathVariable Long meetingId){
+        return meetingService.getMeetingInfo(meetingId);
     }
 
 }
