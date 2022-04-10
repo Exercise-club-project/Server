@@ -50,4 +50,7 @@ public class Meeting {
         this.clubId = clubId;
     }
 
+    public void setNumber(Integer number) {
+        this.number = number;
+    }
 }

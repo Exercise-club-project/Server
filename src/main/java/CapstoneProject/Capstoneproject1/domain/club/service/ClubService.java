@@ -6,6 +6,8 @@ import CapstoneProject.Capstoneproject1.domain.club.domain.ClubRepository;
 import CapstoneProject.Capstoneproject1.domain.club.dto.CreateClubRequestDto;
 import CapstoneProject.Capstoneproject1.domain.club.dto.GetClubResponseDto;
 import CapstoneProject.Capstoneproject1.domain.config.JwtAuthenticationProvider;
+import CapstoneProject.Capstoneproject1.domain.meeting.domain.Score;
+import CapstoneProject.Capstoneproject1.domain.meeting.domain.ScoreRepository;
 import CapstoneProject.Capstoneproject1.domain.user.domain.User;
 import CapstoneProject.Capstoneproject1.domain.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,7 @@ public class ClubService {
     private final UserRepository userRepository;
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
     private final UserDetailsService userDetailsService;
+    private final ScoreRepository scoreRepository;
 
     public ResponseDto createClub(CreateClubRequestDto createClubRequestDto, ServletRequest request) {
 
@@ -46,6 +49,14 @@ public class ClubService {
 
         user.setClub(club);
         userRepository.save(user);
+
+        Score score = new Score();
+        score.setTotalScore(0);
+        score.setRegularScore(0);
+        score.setImpromptuScore(0);
+        score.setOpeningScore(0);
+        score.setClub(club);
+        scoreRepository.save(score);
 
         return new ResponseDto("SUCCESS",club.getClubId());
     }

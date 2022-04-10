@@ -34,4 +34,11 @@ public class MeetingController {
         return meetingService.getMeetingInfo(meetingId);
     }
 
+    @PostMapping("/user/meeting/join/{meetingId}")
+    @ResponseBody
+    public ResponseDto joinMeeting(@PathVariable Long meetingId, ServletRequest request){
+        return meetingService.joinMeeting(meetingId, request);
+    }
+
+
 }

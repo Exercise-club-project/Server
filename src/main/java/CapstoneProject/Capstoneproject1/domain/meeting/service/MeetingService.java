@@ -1,11 +1,10 @@
 package CapstoneProject.Capstoneproject1.domain.meeting.service;
 
 import CapstoneProject.Capstoneproject1.domain.ResponseDto;
+import CapstoneProject.Capstoneproject1.domain.club.domain.Club;
+import CapstoneProject.Capstoneproject1.domain.club.domain.ClubRepository;
 import CapstoneProject.Capstoneproject1.domain.config.JwtAuthenticationProvider;
-import CapstoneProject.Capstoneproject1.domain.meeting.domain.Meeting;
-import CapstoneProject.Capstoneproject1.domain.meeting.domain.MeetingRepository;
-import CapstoneProject.Capstoneproject1.domain.meeting.domain.MeetingUser;
-import CapstoneProject.Capstoneproject1.domain.meeting.domain.MeetingUserRepository;
+import CapstoneProject.Capstoneproject1.domain.meeting.domain.*;
 import CapstoneProject.Capstoneproject1.domain.meeting.dto.CreateMeetingRequestDto;
 import CapstoneProject.Capstoneproject1.domain.meeting.dto.SearchMeetingResponseDto;
 import CapstoneProject.Capstoneproject1.domain.user.domain.User;
@@ -34,6 +33,8 @@ public class MeetingService {
     private final MeetingUserRepository meetingUserRepository;
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
     private final UserRepository userRepository;
+    private final ClubRepository clubRepository;
+    private final ScoreRepository scoreRepository;
 
     @Transactional
     public ResponseDto createMeeting(CreateMeetingRequestDto createMeetingRequestDto, ServletRequest request) {
@@ -99,15 +100,60 @@ public class MeetingService {
 
         Meeting meeting = meetingRepository.getById(meetingId);
 
-        CreateMeetingRequestDto result = CreateMeetingRequestDto.builder()
-                .meetingName(meeting.getMeetingName())
-                .meetingType(meeting.getMeetingType())
-                .startDate(meeting.getStartDate())
-                .endDate(meeting.getEndDate())
-                .description(meeting.getDescription())
-                .build();
+        CreateMeetingRequestDto result = new CreateMeetingRequestDto();
+        result.setMeetingName(meeting.getMeetingName());
+        result.setMeetingType(meeting.getMeetingType());
+        result.setStartDate(meeting.getStartDate());
+        result.setEndDate(meeting.getEndDate());
+        result.setDescription(meeting.getDescription());
 
         return new ResponseDto("SUCCESS",result);
 
+    }
+
+    public ResponseDto joinMeeting(Long meetingId, ServletRequest request) {
+
+        String token = jwtAuthenticationProvider.resolveToken((HttpServletRequest) request);
+        User user = userRepository.findByEmail(jwtAuthenticationProvider.getUserPk(token));
+
+        Meeting meeting = meetingRepository.findById(meetingId)
+                .orElseThrow(()->new IllegalArgumentException("존재하지 않는 모임입니다."));
+
+        Club club = clubRepository.findById(user.getClub().getClubId())
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 동아리입니다."));
+
+        Score score = scoreRepository.findByClub(club);
+
+        if(meeting.getMeetingType().equals("정기모임")){
+            score.setRegularScore(score.getRegularScore()+10);
+            score.setTotalScore(score.getTotalScore()+10);
+            scoreRepository.save(score);
+        }
+
+        else if(meeting.getMeetingType().equals("번개모임")){
+            score.setImpromptuScore(score.getImpromptuScore()+5);
+            score.setTotalScore(score.getTotalScore()+5);
+            scoreRepository.save(score);
+        }
+
+        else if(meeting.getMeetingType().equals("총회모임")){
+            score.setOpeningScore(score.getOpeningScore()+30);
+            score.setTotalScore(score.getTotalScore()+30);
+            scoreRepository.save(score);
+        }
+
+        else{
+            return new ResponseDto("FAIL","모임 유형을 다시 확인해주세요");
+        }
+
+        meeting.setNumber(meeting.getNumber()+1);
+        meetingRepository.save(meeting); // 모임 인원 증가
+
+        MeetingUser meetingUser = new MeetingUser();
+        meetingUser.setMeeting(meeting);
+        meetingUser.setUser(user);
+        meetingUserRepository.save(meetingUser);
+
+        return new ResponseDto("SUCCESS",meeting.getMeetingId());
     }
 }
