@@ -6,6 +6,8 @@ import CapstoneProject.Capstoneproject1.domain.club.domain.ClubRepository;
 import CapstoneProject.Capstoneproject1.domain.club.dto.CreateClubRequestDto;
 import CapstoneProject.Capstoneproject1.domain.club.dto.GetClubResponseDto;
 import CapstoneProject.Capstoneproject1.domain.config.JwtAuthenticationProvider;
+import CapstoneProject.Capstoneproject1.domain.meeting.domain.Score;
+import CapstoneProject.Capstoneproject1.domain.meeting.domain.ScoreRepository;
 import CapstoneProject.Capstoneproject1.domain.user.domain.User;
 import CapstoneProject.Capstoneproject1.domain.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +27,12 @@ public class ClubService {
     private final UserRepository userRepository;
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
     private final UserDetailsService userDetailsService;
+    private final ScoreRepository scoreRepository;
 
-    public ResponseDto createClub(CreateClubRequestDto createClubRequestDto) {
+    public ResponseDto createClub(CreateClubRequestDto createClubRequestDto, ServletRequest request) {
+
+        String token = jwtAuthenticationProvider.resolveToken((HttpServletRequest) request);
+        User user = userRepository.findByEmail(jwtAuthenticationProvider.getUserPk(token));
 
         if(clubRepository.existsByClubName(createClubRequestDto.getClubName())){
             return new ResponseDto("FAIL","이미 존재하는 동아리 이름입니다.");
@@ -35,11 +41,22 @@ public class ClubService {
         Club club = Club.builder()
                 .clubName(createClubRequestDto.getClubName())
                 .school(createClubRequestDto.getSchool())
-                .peopleNumber(0)
+                .peopleNumber(1)
                 .leader(createClubRequestDto.getLeader())
                 .build();
 
         clubRepository.save(club);
+
+        user.setClub(club);
+        userRepository.save(user);
+
+        Score score = new Score();
+        score.setTotalScore(0);
+        score.setRegularScore(0);
+        score.setImpromptuScore(0);
+        score.setOpeningScore(0);
+        score.setClub(club);
+        scoreRepository.save(score);
 
         return new ResponseDto("SUCCESS",club.getClubId());
     }

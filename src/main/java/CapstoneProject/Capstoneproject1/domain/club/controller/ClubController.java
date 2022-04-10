@@ -17,8 +17,8 @@ public class ClubController {
 
     @PostMapping("user/group/create")
     @ResponseBody
-    public ResponseDto createClub(@RequestBody CreateClubRequestDto createClubRequestDto){
-        return clubService.createClub(createClubRequestDto);
+    public ResponseDto createClub(@RequestBody CreateClubRequestDto createClubRequestDto, ServletRequest request){
+        return clubService.createClub(createClubRequestDto, request);
     }
 
     @GetMapping("/user/group/search/{school}")
