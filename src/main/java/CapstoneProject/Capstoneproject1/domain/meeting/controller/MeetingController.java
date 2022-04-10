@@ -40,5 +40,9 @@ public class MeetingController {
         return meetingService.joinMeeting(meetingId, request);
     }
 
-
+    @GetMapping("/user/meeting/history")
+    @ResponseBody
+    public ResponseDto getMeetingHistory(ServletRequest request){
+        return meetingService.getMeetingHistory(request);
+    }
 }

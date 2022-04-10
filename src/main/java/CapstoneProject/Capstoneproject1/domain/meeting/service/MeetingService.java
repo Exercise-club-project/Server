@@ -156,4 +156,24 @@ public class MeetingService {
 
         return new ResponseDto("SUCCESS",meeting.getMeetingId());
     }
+
+    public ResponseDto getMeetingHistory(ServletRequest request) {
+        String token = jwtAuthenticationProvider.resolveToken((HttpServletRequest) request);
+        User user = userRepository.findByEmail(jwtAuthenticationProvider.getUserPk(token));
+
+        List<MeetingUser> meetingUserList = meetingUserRepository.findAllByUser(user);
+
+        List<SearchMeetingResponseDto> result = new ArrayList<>();
+
+        for(MeetingUser m : meetingUserList){
+            SearchMeetingResponseDto temp = new SearchMeetingResponseDto();
+            temp.setName(m.getMeeting().getMeetingName());
+            temp.setType(m.getMeeting().getMeetingType());
+            temp.setStartTime(m.getMeeting().getStartDate());
+
+            result.add(temp);
+        }
+
+        return new ResponseDto("SUCCESS",result);
+    }
 }
