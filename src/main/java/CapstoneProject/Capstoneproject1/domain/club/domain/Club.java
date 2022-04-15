@@ -37,18 +37,49 @@ public class Club {
     @Column(name = "date") // 동아리 생성 날짜
     private LocalDate date;
 
-    @Column(name = "ranking") // "rank"는 데이터베이스에서 이미 사용하는 예약어이기 때문에 "ranking"으로 바꿔줌
-    private Integer rank;
+    @Column(name="t_score")
+    private Integer totalScore;
+
+    @Column(name="r_score")
+    private Integer regularScore;
+
+    @Column(name="i_score")
+    private Integer impromptuScore;
+
+    @Column(name="o_score")
+    private Integer openingScore;
 
     @Builder
-    public Club(String clubName, String school, Integer peopleNumber, String leader){
+    public Club(String clubName, String school, Integer peopleNumber, String leader, Integer totalScore,
+                Integer regularScore, Integer impromptuScore, Integer openingScore){
         this.clubName = clubName;
         this.peopleNumber = peopleNumber;
         this.school = school;
         this.leader = leader;
+        this.totalScore = totalScore;
+        this.regularScore = regularScore;
+        this.impromptuScore = impromptuScore;
+        this.openingScore = openingScore;
     }
 
     public void setPeopleNumber(Integer peopleNumber){
         this.peopleNumber = peopleNumber;
     }
+
+    public void setTotalScore(Integer totalScore) {
+        this.totalScore = totalScore;
+    }
+
+    public void setRegularScore(Integer regularScore) {
+        this.regularScore = regularScore;
+    }
+
+    public void setImpromptuScore(Integer impromptuScore) {
+        this.impromptuScore = impromptuScore;
+    }
+
+    public void setOpeningScore(Integer openingScore) {
+        this.openingScore = openingScore;
+    }
+
 }

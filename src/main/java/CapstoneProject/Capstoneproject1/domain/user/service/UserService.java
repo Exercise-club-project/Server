@@ -42,6 +42,10 @@ public class UserService {
                 .birthDate(userRegisterDto.getBirthDate())
                 .phoneNumber(userRegisterDto.getPhoneNumber())
                 .roles(Collections.singletonList("ROLE_USER"))
+                .totalScore(0)
+                .impromptuScore(0)
+                .openingScore(0)
+                .regularScore(0)
                 .build());
 
         return new ResponseDto("SUCCESS", user.getUserId());
@@ -75,6 +79,7 @@ public class UserService {
 
         return new ResponseDto("SUCCESS", tokenDto);
         }
+
     public ResponseDto logout(ServletRequest request, UserLogoutRequestDto userLogoutRequestDto){
         // 1. Access Token 검증
         if(!jwtAuthenticationProvider.validateToken(userLogoutRequestDto.getAccessToken())){

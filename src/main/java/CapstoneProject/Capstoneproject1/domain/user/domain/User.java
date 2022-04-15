@@ -43,6 +43,18 @@ public class User implements UserDetails {
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    @Column(name="t_score")
+    private Integer totalScore;
+
+    @Column(name="r_score")
+    private Integer regularScore;
+
+    @Column(name="i_score")
+    private Integer impromptuScore;
+
+    @Column(name="o_score")
+    private Integer openingScore;
+
     @ManyToOne
     @JoinColumn(name = "club_id")
     private Club club;
@@ -52,7 +64,8 @@ public class User implements UserDetails {
 
     @Builder
     public User(String email, String password, String name, String birthDate, String sex, String phoneNumber,
-                List<String> roles){
+                List<String> roles, Integer totalScore, Integer regularScore, Integer impromptuScore,
+                Integer openingScore){
         this.email = email;
         this.name = name;
         this.birthDate = birthDate;
@@ -60,6 +73,10 @@ public class User implements UserDetails {
         this.sex = sex;
         this.phoneNumber = phoneNumber;
         this.roles = roles;
+        this.totalScore = totalScore;
+        this.regularScore = regularScore;
+        this.impromptuScore = impromptuScore;
+        this.openingScore = openingScore;
     }
 
     public void setClub(Club club){
@@ -100,4 +117,21 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public void setTotalScore(Integer totalScore) {
+        this.totalScore = totalScore;
+    }
+
+    public void setRegularScore(Integer regularScore) {
+        this.regularScore = regularScore;
+    }
+
+    public void setImpromptuScore(Integer impromptuScore) {
+        this.impromptuScore = impromptuScore;
+    }
+
+    public void setOpeningScore(Integer openingScore) {
+        this.openingScore = openingScore;
+    }
+
 }
