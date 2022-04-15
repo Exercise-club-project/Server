@@ -64,4 +64,21 @@ public class RankService {
         return new ResponseDto("SUCCESS",result);
 
     }
+
+    public ResponseDto getRankByUser() {
+
+        List<User> userList = userRepository.findAll(Sort.by(Sort.Direction.DESC, "totalScore"));
+        List<GetRankByUserResponseDto> result = new ArrayList<>();
+
+        for(User u : userList){
+            GetRankByUserResponseDto temp = new GetRankByUserResponseDto();
+            temp.setClub(u.getClub().getClubName());
+            temp.setName(u.getName());
+            temp.setScore(u.getTotalScore());
+
+            result.add(temp);
+        }
+
+        return new ResponseDto("SUCCESS",result);
+    }
 }

@@ -27,5 +27,11 @@ public class RankController {
         return rankService.getRankByUserInGroup(request);
     }
 
+    @ResponseBody
+    @GetMapping("/rank/user")
+    public ResponseDto getRankByUser(){ // 전체 개인 랭킹 조회
+        return rankService.getRankByUser();
+    }
+
 
 }
