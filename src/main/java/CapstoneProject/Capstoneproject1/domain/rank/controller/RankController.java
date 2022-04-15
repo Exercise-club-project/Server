@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.ServletRequest;
+
 @Controller
 @RequiredArgsConstructor
 public class RankController {
@@ -15,8 +17,14 @@ public class RankController {
 
     @ResponseBody
     @GetMapping("/rank/group")
-    public ResponseDto getRankByGroup() {
+    public ResponseDto getRankByGroup() { // 동아리 랭킹 조회
         return rankService.getRankByGroup();
+    }
+
+    @ResponseBody
+    @GetMapping("/rank/group/user")
+    public ResponseDto getRankByUserInGroup(ServletRequest request){ // 동아리내 개인 랭킹 조회
+        return rankService.getRankByUserInGroup(request);
     }
 
 
