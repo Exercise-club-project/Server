@@ -34,7 +34,6 @@ public class MeetingService {
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
     private final UserRepository userRepository;
     private final ClubRepository clubRepository;
-    private final ScoreRepository scoreRepository;
 
     @Transactional
     public ResponseDto createMeeting(CreateMeetingRequestDto createMeetingRequestDto, ServletRequest request) {
@@ -122,24 +121,31 @@ public class MeetingService {
         Club club = clubRepository.findById(user.getClub().getClubId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 동아리입니다."));
 
-        Score score = scoreRepository.findByClub(club);
-
         if(meeting.getMeetingType().equals("정기모임")){
-            score.setRegularScore(score.getRegularScore()+10);
-            score.setTotalScore(score.getTotalScore()+10);
-            scoreRepository.save(score);
+            club.setRegularScore(club.getRegularScore()+10);
+            club.setTotalScore(club.getTotalScore()+10);
+            clubRepository.save(club);
+            user.setRegularScore(user.getRegularScore()+10);
+            user.setTotalScore(user.getTotalScore()+10);
+            userRepository.save(user);
         }
 
         else if(meeting.getMeetingType().equals("번개모임")){
-            score.setImpromptuScore(score.getImpromptuScore()+5);
-            score.setTotalScore(score.getTotalScore()+5);
-            scoreRepository.save(score);
+            club.setImpromptuScore(club.getImpromptuScore()+5);
+            club.setTotalScore(club.getTotalScore()+5);
+            clubRepository.save(club);
+            user.setImpromptuScore(user.getImpromptuScore()+5);
+            user.setTotalScore(user.getTotalScore()+5);
+            userRepository.save(user);
         }
 
         else if(meeting.getMeetingType().equals("총회모임")){
-            score.setOpeningScore(score.getOpeningScore()+30);
-            score.setTotalScore(score.getTotalScore()+30);
-            scoreRepository.save(score);
+            club.setOpeningScore(club.getOpeningScore()+30);
+            club.setTotalScore(club.getTotalScore()+30);
+            clubRepository.save(club);
+            user.setOpeningScore(user.getOpeningScore()+30);
+            user.setTotalScore(user.getTotalScore()+30);
+            userRepository.save(user);
         }
 
         else{
