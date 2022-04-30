@@ -2,6 +2,7 @@ package CapstoneProject.Capstoneproject1.domain.user.service;
 
 import CapstoneProject.Capstoneproject1.domain.ResponseDto;
 import CapstoneProject.Capstoneproject1.domain.config.JwtAuthenticationProvider;
+import CapstoneProject.Capstoneproject1.domain.meeting.dto.QrCodeResponseDto;
 import CapstoneProject.Capstoneproject1.domain.user.domain.User;
 import CapstoneProject.Capstoneproject1.domain.user.domain.UserRepository;
 import CapstoneProject.Capstoneproject1.domain.user.dto.*;
@@ -127,4 +128,37 @@ public class UserService {
     }
 
 
+    public ResponseDto createQrcodeToken(ServletRequest request) {
+        String token = jwtAuthenticationProvider.resolveToken((HttpServletRequest) request);
+        User user = userRepository.findByEmail(jwtAuthenticationProvider.getUserPk(token));
+
+        if(redisTemplate.opsForValue().get("QR:" + user.getEmail()) != null) {
+            redisTemplate.delete("QR:"+user.getEmail());
+
+            QrCodeResponseDto tokenDto = jwtAuthenticationProvider.createQrCodeToken(user.getEmail(), user.getRoles());
+            tokenDto.setUserId(user.getUserId());
+
+            redisTemplate.opsForValue().set("QR:" + user.getEmail(),
+                    tokenDto.getQrcodeToken(), tokenDto.getExpiredTime(), TimeUnit.MILLISECONDS);
+            // "Redis"에 "QRCODE"가 이미 존재 할 경우 삭제 후 재전송
+            return new ResponseDto("SUCCESS", tokenDto);
+        }
+        QrCodeResponseDto tokenDto = jwtAuthenticationProvider.createQrCodeToken(user.getEmail(), user.getRoles());
+        tokenDto.setUserId(user.getUserId());
+
+        redisTemplate.opsForValue().set("QR:" + user.getEmail(),
+                tokenDto.getQrcodeToken(), tokenDto.getExpiredTime(), TimeUnit.MILLISECONDS);
+        return new ResponseDto("SUCCESS", tokenDto.getQrcodeToken());
+    }
+
+    public ResponseDto getQrcodeToken(ServletRequest request) {
+        String token = jwtAuthenticationProvider.resolveQrCodeToken((HttpServletRequest) request);
+        if(!jwtAuthenticationProvider.validateToken(token)){
+            return new ResponseDto("FAIL","QR 코드를 재갱신 해주세요");
+            // 토큰이 만료될 경우
+        }
+        User user = userRepository.findByEmail(jwtAuthenticationProvider.getUserPk(token));
+
+        return new ResponseDto("SUCCESS",user.getUserId());
+    }
 }
