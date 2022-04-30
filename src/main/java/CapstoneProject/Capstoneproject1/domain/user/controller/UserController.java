@@ -47,4 +47,16 @@ public class UserController {
     public ResponseDto reIssue(@RequestBody UserLogoutRequestDto userLogoutRequestDto, ServletRequest request){
         return userService.reIssue(userLogoutRequestDto,request);
     }
+
+    @PostMapping("qr/create")
+    @ResponseBody
+    public ResponseDto createQrcodeToken(ServletRequest request){
+        return userService.createQrcodeToken(request);
+    }
+
+    @GetMapping("qr/get")
+    @ResponseBody
+    public ResponseDto getQrcodeToken(ServletRequest request){
+        return userService.getQrcodeToken(request);
+    }
 }

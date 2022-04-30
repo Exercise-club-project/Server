@@ -1,5 +1,6 @@
 package CapstoneProject.Capstoneproject1.domain.config;
 
+import CapstoneProject.Capstoneproject1.domain.meeting.dto.QrCodeResponseDto;
 import CapstoneProject.Capstoneproject1.domain.user.dto.TokenDto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -27,6 +28,7 @@ public class JwtAuthenticationProvider {
 
     private static final long ACCESS_TOKEN_EXPIRE_TIME = 30 * 60 * 1000L; // 30분
     private static final long REFRESH_TOKEN_EXPIRE_TIME = 7 * 24 * 60 * 60 * 1000L;    // 7일
+    private static final long QRCODE_TOKEN_EXPIRE_TIME = 15* 1000L; // 15초
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -118,4 +120,33 @@ public class JwtAuthenticationProvider {
         long now = new Date().getTime();
         return (expiration.getTime() - now);
     }
+
+    public QrCodeResponseDto createQrCodeToken(String userEmail, List<String> roles) {
+        Claims claims = Jwts.claims().setSubject(userEmail); // JWT payload 에 저장되는 정보단위
+        // "setSubject"를 통해서 "userEmail"을 넣음, 기존에는 이름이였음
+        claims.put("roles", roles); // 정보는 key / value 쌍으로 저장된다.
+        Date now1 = new Date();
+        long now2 = new Date().getTime();
+
+        Date qrcodeTokenExpireDate = new Date(now2 + QRCODE_TOKEN_EXPIRE_TIME);
+
+        String qrcodeToken = Jwts.builder()
+                .setClaims((claims))
+                .setIssuedAt(now1)
+                .setExpiration(qrcodeTokenExpireDate)
+                .signWith(getSigninKey(secretKey), SignatureAlgorithm.HS256)
+                .compact();
+
+        QrCodeResponseDto tokenDto = new QrCodeResponseDto();
+        tokenDto.setQrcodeToken(qrcodeToken);
+        tokenDto.setExpiredTime(QRCODE_TOKEN_EXPIRE_TIME);
+
+        return tokenDto;
+    }
+
+    // "Request"의 "Header"에서 "Qrcode_Token" 값을 가져옵니다. "Qrcode_Token" : "Qrcode_Token"의 값
+    public String resolveQrCodeToken(HttpServletRequest request) {
+        return request.getHeader("Qrcode_Token");
+    }
+
 }
