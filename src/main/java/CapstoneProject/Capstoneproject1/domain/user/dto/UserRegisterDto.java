@@ -8,6 +8,7 @@ public class UserRegisterDto {
     private String email;
     private String password;
     private String name;
+    private String school;
     private String birthDate;
     private String sex;
     private String phoneNumber;

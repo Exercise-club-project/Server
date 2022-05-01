@@ -161,4 +161,25 @@ public class UserService {
 
         return new ResponseDto("SUCCESS",user.getUserId());
     }
+
+    public ResponseDto getUserHistory(ServletRequest request) {
+        String token = jwtAuthenticationProvider.resolveToken((HttpServletRequest) request);
+        User user = userRepository.findByEmail(jwtAuthenticationProvider.getUserPk(token));
+
+        if(user.getClub() == null){
+            return new ResponseDto("FAIL", "해당 사용자는 동아리에 가입되어 있지 않습니다.");
+        }
+
+        UserHistoryResponseDto userHistoryResponseDto = UserHistoryResponseDto.builder()
+                .userName(user.getUsername())
+                .schoolName(user.getClub().getSchool())
+                .clubName(user.getClub().getClubName())
+                .totalScore(user.getTotalScore())
+                .openScore(user.getOpeningScore())
+                .regularScore(user.getRegularScore())
+                .impromptuScore(user.getImpromptuScore())
+                .build();
+
+        return new ResponseDto("SUCCESS",userHistoryResponseDto);
+    }
 }
