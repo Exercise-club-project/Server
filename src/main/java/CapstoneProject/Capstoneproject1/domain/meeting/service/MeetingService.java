@@ -84,6 +84,7 @@ public class MeetingService {
 
             compare = meetingDateTime.compareTo(now);
             if(compare == 0 || compare>0){
+                temp.setMeetingId(m.getMeetingId());
                 temp.setName(m.getMeetingName());
                 temp.setType(m.getMeetingType());
                 temp.setStartTime(m.getStartDate());
@@ -173,6 +174,7 @@ public class MeetingService {
 
         for(MeetingUser m : meetingUserList){
             SearchMeetingResponseDto temp = new SearchMeetingResponseDto();
+            temp.setMeetingId(m.getMeetingUserId());
             temp.setName(m.getMeeting().getMeetingName());
             temp.setType(m.getMeeting().getMeetingType());
             temp.setStartTime(m.getMeeting().getStartDate());

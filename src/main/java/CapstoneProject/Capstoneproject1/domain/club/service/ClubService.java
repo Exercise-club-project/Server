@@ -62,6 +62,7 @@ public class ClubService {
 
         for(Club c : temp1){
             CreateClubRequestDto temp2 = new CreateClubRequestDto();
+            temp2.setClubId(c.getClubId());
             temp2.setClubName(c.getClubName());
             temp2.setLeader(c.getLeader());
             temp2.setSchool(c.getSchool());
