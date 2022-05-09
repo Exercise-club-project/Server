@@ -84,6 +84,7 @@ public class MeetingService {
 
             compare = meetingDateTime.compareTo(now);
             if(compare == 0 || compare>0){
+                temp.setMeetingId(m.getMeetingId());
                 temp.setName(m.getMeetingName());
                 temp.setType(m.getMeetingType());
                 temp.setStartTime(m.getStartDate());
@@ -100,6 +101,7 @@ public class MeetingService {
         Meeting meeting = meetingRepository.getById(meetingId);
 
         CreateMeetingRequestDto result = new CreateMeetingRequestDto();
+        result.setMeetingId(meetingId);
         result.setMeetingName(meeting.getMeetingName());
         result.setMeetingType(meeting.getMeetingType());
         result.setStartDate(meeting.getStartDate());

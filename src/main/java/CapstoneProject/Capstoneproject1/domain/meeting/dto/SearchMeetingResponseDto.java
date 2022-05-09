@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class SearchMeetingResponseDto {
 
+    Long meetingId;
     String name;
     String type;
     String startTime;

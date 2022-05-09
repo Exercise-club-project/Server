@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class CreateMeetingRequestDto {
+    Long meetingId;
     String meetingName;
     String meetingType;
     String startDate;
