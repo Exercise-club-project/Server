@@ -101,7 +101,6 @@ public class MeetingService {
         Meeting meeting = meetingRepository.getById(meetingId);
 
         CreateMeetingRequestDto result = new CreateMeetingRequestDto();
-        result.setMeetingId(meetingId);
         result.setMeetingName(meeting.getMeetingName());
         result.setMeetingType(meeting.getMeetingType());
         result.setStartDate(meeting.getStartDate());
@@ -175,6 +174,7 @@ public class MeetingService {
 
         for(MeetingUser m : meetingUserList){
             SearchMeetingResponseDto temp = new SearchMeetingResponseDto();
+            temp.setMeetingId(m.getMeetingUserId());
             temp.setName(m.getMeeting().getMeetingName());
             temp.setType(m.getMeeting().getMeetingType());
             temp.setStartTime(m.getMeeting().getStartDate());
