@@ -47,6 +47,7 @@ public class UserService {
                 .impromptuScore(0)
                 .openingScore(0)
                 .regularScore(0)
+                .grade("일반회원")
                 .build());
 
         return new ResponseDto("SUCCESS", user.getUserId());

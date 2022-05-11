@@ -49,6 +49,7 @@ public class ClubService {
         clubRepository.save(club);
 
         user.setClub(club);
+        user.setGrade("운영진");
         userRepository.save(user);
 
         return new ResponseDto("SUCCESS",club.getClubId());

@@ -55,6 +55,9 @@ public class User implements UserDetails {
     @Column(name="o_score")
     private Integer openingScore;
 
+    @Column(name="grade")
+    private String grade;
+
     @ManyToOne
     @JoinColumn(name = "club_id")
     private Club club;
@@ -65,7 +68,7 @@ public class User implements UserDetails {
     @Builder
     public User(String email, String password, String name, String birthDate, String sex, String phoneNumber,
                 List<String> roles, Integer totalScore, Integer regularScore, Integer impromptuScore,
-                Integer openingScore){
+                Integer openingScore, String grade){
         this.email = email;
         this.name = name;
         this.birthDate = birthDate;
@@ -77,6 +80,7 @@ public class User implements UserDetails {
         this.regularScore = regularScore;
         this.impromptuScore = impromptuScore;
         this.openingScore = openingScore;
+        this.grade = grade;
     }
 
     public void setClub(Club club){
@@ -134,4 +138,5 @@ public class User implements UserDetails {
         this.openingScore = openingScore;
     }
 
+    public void setGrade(String grade){this.grade = grade;}
 }
