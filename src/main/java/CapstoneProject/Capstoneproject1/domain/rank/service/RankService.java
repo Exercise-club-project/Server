@@ -27,12 +27,14 @@ public class RankService {
     private final UserRepository userRepository;
 
     public ResponseDto getRankByGroup() {
+        int num = 1;
 
         List<Club> clubList = clubRepository.findAll(Sort.by(Sort.Direction.DESC, "totalScore"));
         List<GetRankByGroupResponseDto> result = new ArrayList<>();
 
         for(Club c : clubList){
             GetRankByGroupResponseDto temp = new GetRankByGroupResponseDto();
+            temp.setNum(num++);
             temp.setClub(c.getClubName());
             temp.setSchool(c.getSchool());
             temp.setScore(c.getTotalScore());
@@ -45,6 +47,7 @@ public class RankService {
 
 
     public ResponseDto getRankByUserInGroup(ServletRequest request) {
+        int num = 1;
 
         String token = jwtAuthenticationProvider.resolveToken((HttpServletRequest) request);
         User user = userRepository.findByEmail(jwtAuthenticationProvider.getUserPk(token));
@@ -55,6 +58,7 @@ public class RankService {
 
         for(User u : userList){
             GetRankByUserResponseDto temp = new GetRankByUserResponseDto();
+            temp.setNum(num++);
             temp.setClub(u.getClub().getClubName());
             temp.setName(u.getName());
             temp.setScore(u.getTotalScore());
@@ -66,12 +70,14 @@ public class RankService {
     }
 
     public ResponseDto getRankByUser() {
+        int num=1;
 
         List<User> userList = userRepository.findAll(Sort.by(Sort.Direction.DESC, "totalScore"));
         List<GetRankByUserResponseDto> result = new ArrayList<>();
 
         for(User u : userList){
             GetRankByUserResponseDto temp = new GetRankByUserResponseDto();
+            temp.setNum(num++);
             temp.setClub(u.getClub().getClubName());
             temp.setName(u.getName());
             temp.setScore(u.getTotalScore());
