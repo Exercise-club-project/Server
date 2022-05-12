@@ -67,7 +67,6 @@ public class UserService {
             return new ResponseDto("FAIL", "존재하지 않는 이메일입니다.");}
 
         User user = userRepository.findByEmail(userLoginDto.getEmail());
-
         if (!passwordEncoder.matches(userLoginDto.getPassword(), user.getPassword())) {
                 return new ResponseDto("FAIL", "비밀번호가 틀렸습니다.");
             }
@@ -79,7 +78,16 @@ public class UserService {
         redisTemplate.opsForValue().set("RT:"+user.getEmail(),
                 tokenDto.getRefreshToken(), tokenDto.getRefreshTokenTime(), TimeUnit.MILLISECONDS);
 
-        return new ResponseDto("SUCCESS", tokenDto);
+        LoginDto loginDto = new LoginDto();
+        loginDto.setTokenDto(tokenDto);
+
+        if(user.getClub() == null){
+            loginDto.setClubId(0L); // 회원이 동아리에 속해있지 않음
+            return new ResponseDto("SUCCESS",loginDto);
+        }
+        loginDto.setClubId(user.getClub().getClubId()); // 회원이 동아리에 속해있음
+        return new ResponseDto("SUCCESS", loginDto);
+
         }
 
     public ResponseDto logout(ServletRequest request, UserLogoutRequestDto userLogoutRequestDto){
