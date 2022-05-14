@@ -5,6 +5,7 @@ import CapstoneProject.Capstoneproject1.domain.club.domain.Club;
 import CapstoneProject.Capstoneproject1.domain.club.domain.ClubRepository;
 import CapstoneProject.Capstoneproject1.domain.club.dto.CreateClubRequestDto;
 import CapstoneProject.Capstoneproject1.domain.club.dto.GetClubResponseDto;
+import CapstoneProject.Capstoneproject1.domain.club.dto.SearchAllClubResponseDto;
 import CapstoneProject.Capstoneproject1.domain.config.JwtAuthenticationProvider;
 import CapstoneProject.Capstoneproject1.domain.user.domain.User;
 import CapstoneProject.Capstoneproject1.domain.user.domain.UserRepository;
@@ -102,5 +103,20 @@ public class ClubService {
         clubRepository.save(club);
 
         return new ResponseDto("SUCCESS",club.getClubId());
+    }
+
+    public ResponseDto searchAllClub() {
+        List<Club> clubList = clubRepository.findAll();
+        List<SearchAllClubResponseDto> result = new ArrayList<>();
+
+        for(Club c : clubList){
+            SearchAllClubResponseDto temp = new SearchAllClubResponseDto();
+            temp.setClubId(c.getClubId());
+            temp.setClubName(c.getClubName());
+            temp.setSchool(c.getSchool());
+
+            result.add(temp);
+        }
+        return new ResponseDto("SUCCESS",result);
     }
 }
