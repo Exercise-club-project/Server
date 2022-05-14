@@ -27,6 +27,12 @@ public class ClubController {
         return clubService.searchClub(school);
     }
 
+    @GetMapping("/user/group/searchAll")
+    @ResponseBody
+    public ResponseDto searchAllClub(){
+        return clubService.searchAllClub();
+    }
+
     @GetMapping("/group/get/{groupId}")
     @ResponseBody
     public ResponseDto getClub(@PathVariable Long groupId){
@@ -38,4 +44,5 @@ public class ClubController {
     public ResponseDto joinClub(@PathVariable Long groupId, ServletRequest request){
         return clubService.joinClub(groupId,request);
     }
+
 }

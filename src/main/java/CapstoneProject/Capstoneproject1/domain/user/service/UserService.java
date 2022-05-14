@@ -79,6 +79,7 @@ public class UserService {
                 tokenDto.getRefreshToken(), tokenDto.getRefreshTokenTime(), TimeUnit.MILLISECONDS);
 
         LoginDto loginDto = new LoginDto();
+        loginDto.setGrade(user.getGrade());
         loginDto.setTokenDto(tokenDto);
 
         if(user.getClub() == null){
