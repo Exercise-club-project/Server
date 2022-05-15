@@ -70,12 +70,15 @@ public class RankService {
     }
 
     public ResponseDto getRankByUser() {
-        int num=1;
+        int num = 1;
 
         List<User> userList = userRepository.findAll(Sort.by(Sort.Direction.DESC, "totalScore"));
         List<GetRankByUserResponseDto> result = new ArrayList<>();
 
         for(User u : userList){
+            if(u.getClub() == null){
+                new ResponseDto("FAIL","동아리에 가입되어 있지 않은 회원이 존재합니다.");
+            }
             GetRankByUserResponseDto temp = new GetRankByUserResponseDto();
             temp.setNum(num++);
             temp.setClub(u.getClub().getClubName());
