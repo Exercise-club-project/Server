@@ -82,9 +82,12 @@ public class ClubService {
 
         GetClubResponseDto result = new GetClubResponseDto();
         result.setClubName(club.getClubName());
-        result.setLeader(club.getLeader());
         result.setSchool(club.getSchool());
         result.setNumber(club.getPeopleNumber());
+        result.setTotalScore(club.getTotalScore());
+        result.setImpromptuScroe(club.getImpromptuScore());
+        result.setOpenScore(club.getOpeningScore());
+        result.setRegularScore(club.getRegularScore());
 
         return new ResponseDto("SUCCESS",result);
     }

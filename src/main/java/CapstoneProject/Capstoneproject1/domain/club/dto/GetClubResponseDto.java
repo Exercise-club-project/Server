@@ -7,5 +7,8 @@ public class GetClubResponseDto {
     private String clubName;
     private String school;
     private Integer number;
-    private String leader;
+    private Integer totalScore;
+    private Integer openScore;
+    private Integer regularScore;
+    private Integer impromptuScroe;
 }
