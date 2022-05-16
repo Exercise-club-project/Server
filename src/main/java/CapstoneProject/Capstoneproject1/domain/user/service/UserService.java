@@ -172,9 +172,9 @@ public class UserService {
         return new ResponseDto("SUCCESS",user.getUserId());
     }
 
-    public ResponseDto getUserHistory(ServletRequest request) {
-        String token = jwtAuthenticationProvider.resolveToken((HttpServletRequest) request);
-        User user = userRepository.findByEmail(jwtAuthenticationProvider.getUserPk(token));
+    public ResponseDto getUserHistory(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(()->new IllegalArgumentException("존재하지 않는 회원입니다."));
 
         if(user.getClub() == null){
             return new ResponseDto("FAIL", "해당 사용자는 동아리에 가입되어 있지 않습니다.");
