@@ -60,9 +60,9 @@ public class UserController {
         return userService.getQrcodeToken(request);
     }
 
-    @GetMapping("user/history")
+    @GetMapping("user/history/{userId}")
     @ResponseBody
-    public ResponseDto getUserHistory(ServletRequest request){
-        return userService.getUserHistory(request);
+    public ResponseDto getUserHistory(@PathVariable Long userId){
+        return userService.getUserHistory(userId);
     }
 }

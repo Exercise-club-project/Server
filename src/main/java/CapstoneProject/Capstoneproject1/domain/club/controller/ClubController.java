@@ -39,10 +39,10 @@ public class ClubController {
         return clubService.getClub(groupId);
     }
 
-    @PostMapping("/user/group/join/{groupId}")
+    @PostMapping("/{userId}/group/join/{groupId}")
     @ResponseBody
-    public ResponseDto joinClub(@PathVariable Long groupId, ServletRequest request){
-        return clubService.joinClub(groupId,request);
+    public ResponseDto joinClub(@PathVariable Long userId, @PathVariable Long groupId){
+        return clubService.joinClub(userId,groupId);
     }
 
 }

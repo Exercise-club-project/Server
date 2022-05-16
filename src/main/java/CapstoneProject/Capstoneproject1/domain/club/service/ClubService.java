@@ -82,19 +82,22 @@ public class ClubService {
 
         GetClubResponseDto result = new GetClubResponseDto();
         result.setClubName(club.getClubName());
-        result.setLeader(club.getLeader());
         result.setSchool(club.getSchool());
         result.setNumber(club.getPeopleNumber());
+        result.setTotalScore(club.getTotalScore());
+        result.setImpromptuScroe(club.getImpromptuScore());
+        result.setOpenScore(club.getOpeningScore());
+        result.setRegularScore(club.getRegularScore());
 
         return new ResponseDto("SUCCESS",result);
     }
 
-    public ResponseDto joinClub(Long clubId, ServletRequest request) {
+    public ResponseDto joinClub(Long userId, Long clubId) {
         Club club = clubRepository.findById(clubId)
                 .orElseThrow(()->new IllegalArgumentException("존재하지 않는 동아리입니다."));
 
-        String token = jwtAuthenticationProvider.resolveToken((HttpServletRequest) request);
-        User user = userRepository.findByEmail(jwtAuthenticationProvider.getUserPk(token));
+        User user = userRepository.findById(userId)
+                .orElseThrow(()->new IllegalArgumentException("존재하지 않는 회원입니다."));
 
         user.setClub(club);
         userRepository.save(user); // 유저 동아리 가입

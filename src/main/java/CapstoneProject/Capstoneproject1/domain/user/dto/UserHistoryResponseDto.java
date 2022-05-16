@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class UserHistoryResponseDto {
+    private Long userId;
     private String userName;
     private String schoolName;
     private String clubName;
@@ -14,8 +15,9 @@ public class UserHistoryResponseDto {
     private Integer impromptuScore;
 
     @Builder
-    public UserHistoryResponseDto(String userName,String schoolName, String clubName, Integer totalScore,
+    public UserHistoryResponseDto(Long userId, String userName,String schoolName, String clubName, Integer totalScore,
                                   Integer openScore, Integer regularScore, Integer impromptuScore){
+        this.userId = userId;
         this.userName = userName;
         this.schoolName = schoolName;
         this.clubName = clubName;

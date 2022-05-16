@@ -7,6 +7,7 @@ public class GetRankByGroupResponseDto {
 
     private Integer num;
     private String club;
+    private Long clubId;
     private String school;
     private Integer score;
 

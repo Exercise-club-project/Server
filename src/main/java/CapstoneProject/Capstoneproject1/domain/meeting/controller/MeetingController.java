@@ -34,10 +34,10 @@ public class MeetingController {
         return meetingService.getMeetingInfo(meetingId);
     }
 
-    @PostMapping("/user/meeting/join/{meetingId}")
+    @PostMapping("/{userId}/meeting/join/{meetingId}")
     @ResponseBody
-    public ResponseDto joinMeeting(@PathVariable Long meetingId, ServletRequest request){
-        return meetingService.joinMeeting(meetingId, request);
+    public ResponseDto joinMeeting(@PathVariable Long userId, @PathVariable Long meetingId){
+        return meetingService.joinMeeting(userId, meetingId);
     }
 
     @GetMapping("/user/meeting/history")

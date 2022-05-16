@@ -36,6 +36,7 @@ public class RankService {
             GetRankByGroupResponseDto temp = new GetRankByGroupResponseDto();
             temp.setNum(num++);
             temp.setClub(c.getClubName());
+            temp.setClubId(c.getClubId());
             temp.setSchool(c.getSchool());
             temp.setScore(c.getTotalScore());
 
@@ -59,6 +60,7 @@ public class RankService {
         for(User u : userList){
             GetRankByUserResponseDto temp = new GetRankByUserResponseDto();
             temp.setNum(num++);
+            temp.setUserId(u.getUserId());
             temp.setClub(u.getClub().getClubName());
             temp.setName(u.getName());
             temp.setScore(u.getTotalScore());
@@ -83,6 +85,7 @@ public class RankService {
             temp.setNum(num++);
             temp.setClub(u.getClub().getClubName());
             temp.setName(u.getName());
+            temp.setUserId(u.getUserId());
             temp.setScore(u.getTotalScore());
 
             result.add(temp);
