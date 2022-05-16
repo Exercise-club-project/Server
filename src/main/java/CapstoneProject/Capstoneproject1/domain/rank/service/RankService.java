@@ -36,6 +36,7 @@ public class RankService {
             GetRankByGroupResponseDto temp = new GetRankByGroupResponseDto();
             temp.setNum(num++);
             temp.setClub(c.getClubName());
+            temp.setClubId(c.getClubId());
             temp.setSchool(c.getSchool());
             temp.setScore(c.getTotalScore());
 
