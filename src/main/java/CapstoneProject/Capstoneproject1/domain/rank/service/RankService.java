@@ -84,6 +84,7 @@ public class RankService {
             temp.setNum(num++);
             temp.setClub(u.getClub().getClubName());
             temp.setName(u.getName());
+            temp.setUserId(u.getUserId());
             temp.setScore(u.getTotalScore());
 
             result.add(temp);
