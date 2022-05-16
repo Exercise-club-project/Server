@@ -181,6 +181,7 @@ public class UserService {
         }
 
         UserHistoryResponseDto userHistoryResponseDto = UserHistoryResponseDto.builder()
+                .userId(user.getUserId())
                 .userName(user.getUsername())
                 .schoolName(user.getClub().getSchool())
                 .clubName(user.getClub().getClubName())

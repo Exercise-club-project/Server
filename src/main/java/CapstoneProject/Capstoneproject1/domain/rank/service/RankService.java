@@ -59,6 +59,7 @@ public class RankService {
         for(User u : userList){
             GetRankByUserResponseDto temp = new GetRankByUserResponseDto();
             temp.setNum(num++);
+            temp.setUserId(u.getUserId());
             temp.setClub(u.getClub().getClubName());
             temp.setName(u.getName());
             temp.setScore(u.getTotalScore());
