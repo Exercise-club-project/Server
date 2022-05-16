@@ -111,10 +111,10 @@ public class MeetingService {
 
     }
 
-    public ResponseDto joinMeeting(Long meetingId, ServletRequest request) {
+    public ResponseDto joinMeeting(Long userId, Long meetingId) {
 
-        String token = jwtAuthenticationProvider.resolveToken((HttpServletRequest) request);
-        User user = userRepository.findByEmail(jwtAuthenticationProvider.getUserPk(token));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
 
         Meeting meeting = meetingRepository.findById(meetingId)
                 .orElseThrow(()->new IllegalArgumentException("존재하지 않는 모임입니다."));

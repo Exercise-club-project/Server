@@ -1,6 +1,7 @@
 package CapstoneProject.Capstoneproject1.domain.user.service;
 
 import CapstoneProject.Capstoneproject1.domain.ResponseDto;
+import CapstoneProject.Capstoneproject1.domain.club.domain.Club;
 import CapstoneProject.Capstoneproject1.domain.config.JwtAuthenticationProvider;
 import CapstoneProject.Capstoneproject1.domain.meeting.dto.QrCodeResponseDto;
 import CapstoneProject.Capstoneproject1.domain.user.domain.User;
