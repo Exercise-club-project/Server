@@ -159,7 +159,7 @@ public class UserService {
 
         redisTemplate.opsForValue().set("QR:" + user.getEmail(),
                 tokenDto.getQrcodeToken(), tokenDto.getExpiredTime(), TimeUnit.MILLISECONDS);
-        return new ResponseDto("SUCCESS", tokenDto.getQrcodeToken());
+        return new ResponseDto("SUCCESS", tokenDto);
     }
 
     public ResponseDto getQrcodeToken(ServletRequest request) {
