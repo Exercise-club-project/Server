@@ -54,7 +54,6 @@ public class MeetingService {
 
         MeetingUser meetingUser = new MeetingUser();
         meetingUser.setMeeting(meeting);
-        meetingUser.setUser(user);
 
         meetingUserRepository.save(meetingUser);
 
@@ -156,7 +155,7 @@ public class MeetingService {
         meeting.setNumber(meeting.getNumber()+1);
         meetingRepository.save(meeting); // 모임 인원 증가
 
-        MeetingUser meetingUser = new MeetingUser();
+        MeetingUser meetingUser = meetingUserRepository.findByMeeting(meeting.getMeetingId()); //
         meetingUser.setMeeting(meeting);
         meetingUser.setUser(user);
         meetingUserRepository.save(meetingUser);
