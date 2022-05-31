@@ -78,9 +78,7 @@ public class MeetingService {
             int compare;
             SearchMeetingResponseDto temp = new SearchMeetingResponseDto();
 
-
             LocalDateTime meetingDateTime = LocalDateTime.parse(m.getStartDate(),format);
-
 
             compare = meetingDateTime.compareTo(now);
             if(compare == 0 || compare>0){
