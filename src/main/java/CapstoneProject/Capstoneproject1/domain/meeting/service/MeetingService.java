@@ -110,10 +110,10 @@ public class MeetingService {
         List<String> temp = new ArrayList<>();
 
         try {
-            List<User> userList = meetingUserRepository.findAllByMeeting(meetingId);
+            List<MeetingUser> userList = meetingUserRepository.findAllByMeeting(meeting);
 
-            for(User u : userList){
-                temp.add(u.getUsername());
+            for(MeetingUser m : userList){
+                temp.add(m.getUser().getUsername());
         }
             result.setJoinList(temp);
         }
