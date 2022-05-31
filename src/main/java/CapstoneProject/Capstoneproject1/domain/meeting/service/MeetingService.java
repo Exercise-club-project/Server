@@ -6,6 +6,7 @@ import CapstoneProject.Capstoneproject1.domain.club.domain.ClubRepository;
 import CapstoneProject.Capstoneproject1.domain.config.JwtAuthenticationProvider;
 import CapstoneProject.Capstoneproject1.domain.meeting.domain.*;
 import CapstoneProject.Capstoneproject1.domain.meeting.dto.CreateMeetingRequestDto;
+import CapstoneProject.Capstoneproject1.domain.meeting.dto.MeetingInfoResponseDto;
 import CapstoneProject.Capstoneproject1.domain.meeting.dto.SearchMeetingResponseDto;
 import CapstoneProject.Capstoneproject1.domain.user.domain.User;
 import CapstoneProject.Capstoneproject1.domain.user.domain.UserRepository;
@@ -99,12 +100,28 @@ public class MeetingService {
 
         Meeting meeting = meetingRepository.getById(meetingId);
 
-        CreateMeetingRequestDto result = new CreateMeetingRequestDto();
+        MeetingInfoResponseDto result = new MeetingInfoResponseDto();
         result.setMeetingName(meeting.getMeetingName());
         result.setMeetingType(meeting.getMeetingType());
         result.setStartDate(meeting.getStartDate());
         result.setEndDate(meeting.getEndDate());
         result.setDescription(meeting.getDescription());
+
+        List<String> temp = new ArrayList<>();
+
+        try {
+            List<User> userList = meetingUserRepository.findAllByMeeting(meetingId);
+
+            for(User u : userList){
+                temp.add(u.getUsername());
+        }
+            result.setJoinList(temp);
+        }
+
+        catch (NullPointerException e){
+            temp.add("참석한 회원이 존재하지 않습니다.");
+            result.setJoinList(temp);
+        }
 
         return new ResponseDto("SUCCESS",result);
 
