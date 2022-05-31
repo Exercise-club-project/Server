@@ -78,9 +78,7 @@ public class MeetingService {
             int compare;
             SearchMeetingResponseDto temp = new SearchMeetingResponseDto();
 
-
             LocalDateTime meetingDateTime = LocalDateTime.parse(m.getStartDate(),format);
-
 
             compare = meetingDateTime.compareTo(now);
             if(compare == 0 || compare>0){
@@ -138,6 +136,19 @@ public class MeetingService {
         Club club = clubRepository.findById(user.getClub().getClubId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 동아리입니다."));
 
+        if(meetingUserRepository.existsByMeetingAndUser(meeting,user)){
+            return new ResponseDto("FAIL","이미 참석한 회원입니다.");
+        }
+
+        meeting.setNumber(meeting.getNumber()+1);
+        meetingRepository.save(meeting); // 모임 인원 증가
+
+        MeetingUser meetingUser = meetingUserRepository.findByMeeting(meeting);
+        meetingUser.setMeeting(meeting);
+        meetingUser.setUser(user);
+        meetingUserRepository.save(meetingUser);
+
+
         if(meeting.getMeetingType().equals("정기모임")){
             club.setRegularScore(club.getRegularScore()+10);
             club.setTotalScore(club.getTotalScore()+10);
@@ -168,14 +179,6 @@ public class MeetingService {
         else{
             return new ResponseDto("FAIL","모임 유형을 다시 확인해주세요");
         }
-
-        meeting.setNumber(meeting.getNumber()+1);
-        meetingRepository.save(meeting); // 모임 인원 증가
-
-        MeetingUser meetingUser = meetingUserRepository.findByMeeting(meeting.getMeetingId()); //
-        meetingUser.setMeeting(meeting);
-        meetingUser.setUser(user);
-        meetingUserRepository.save(meetingUser);
 
         return new ResponseDto("SUCCESS",meeting.getMeetingId());
     }
