@@ -180,7 +180,7 @@ public class MeetingService {
             return new ResponseDto("FAIL","모임 유형을 다시 확인해주세요");
         }
 
-        return new ResponseDto("SUCCESS",meeting.getMeetingId());
+        return new ResponseDto("SUCCESS","모임 참석 완료");
     }
 
     public ResponseDto getMeetingHistory(ServletRequest request) {
