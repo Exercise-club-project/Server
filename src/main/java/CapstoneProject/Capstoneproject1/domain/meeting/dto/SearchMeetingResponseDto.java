@@ -9,5 +9,6 @@ public class SearchMeetingResponseDto {
     String name;
     String type;
     String startTime;
+    String endTime;
 
 }
