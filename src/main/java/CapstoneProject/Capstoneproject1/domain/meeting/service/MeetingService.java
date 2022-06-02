@@ -63,9 +63,6 @@ public class MeetingService {
 
     public ResponseDto searchMeeting(Long groupId, ServletRequest request){
 
-        String token = jwtAuthenticationProvider.resolveToken((HttpServletRequest) request);
-        User user = userRepository.findByEmail(jwtAuthenticationProvider.getUserPk(token));
-
         List<Meeting> meetingList =  meetingRepository.findAllByClubId(groupId); // 동아리에 생성된 모든 모임
 
         LocalDateTime now = LocalDateTime.now(); // 현재 시간
@@ -78,7 +75,7 @@ public class MeetingService {
             int compare;
             SearchMeetingResponseDto temp = new SearchMeetingResponseDto();
 
-            LocalDateTime meetingDateTime = LocalDateTime.parse(m.getStartDate(),format);
+            LocalDateTime meetingDateTime = LocalDateTime.parse(m.getEndDate(),format);
 
             compare = meetingDateTime.compareTo(now);
             if(compare == 0 || compare>0){
@@ -197,6 +194,7 @@ public class MeetingService {
             temp.setName(m.getMeeting().getMeetingName());
             temp.setType(m.getMeeting().getMeetingType());
             temp.setStartTime(m.getMeeting().getStartDate());
+            temp.setEndTime(m.getMeeting().getEndDate());
 
             result.add(temp);
         }
