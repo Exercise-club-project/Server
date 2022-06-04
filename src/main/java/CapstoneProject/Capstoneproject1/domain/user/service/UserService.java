@@ -80,6 +80,7 @@ public class UserService {
                 tokenDto.getRefreshToken(), tokenDto.getRefreshTokenTime(), TimeUnit.MILLISECONDS);
 
         LoginDto loginDto = new LoginDto();
+        loginDto.setUserId(user.getUserId());
         loginDto.setGrade(user.getGrade());
         loginDto.setTokenDto(tokenDto);
 
