@@ -83,6 +83,7 @@ public class MeetingService {
                 temp.setName(m.getMeetingName());
                 temp.setType(m.getMeetingType());
                 temp.setStartTime(m.getStartDate());
+                temp.setEndTime(m.getEndDate());
 
                 result.add(temp);
             }
