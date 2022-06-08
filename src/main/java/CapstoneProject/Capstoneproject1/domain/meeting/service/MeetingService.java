@@ -192,7 +192,7 @@ public class MeetingService {
 
         for(MeetingUser m : meetingUserList){
             SearchMeetingResponseDto temp = new SearchMeetingResponseDto();
-            temp.setMeetingId(m.getMeetingUserId());
+            temp.setMeetingId(m.getMeeting().getMeetingId());
             temp.setName(m.getMeeting().getMeetingName());
             temp.setType(m.getMeeting().getMeetingType());
             temp.setStartTime(m.getMeeting().getStartDate());
