@@ -141,7 +141,8 @@ public class MeetingService {
         meeting.setNumber(meeting.getNumber()+1);
         meetingRepository.save(meeting); // 모임 인원 증가
 
-        MeetingUser meetingUser = meetingUserRepository.findByMeeting(meeting);
+        // MeetingUser meetingUser = meetingUserRepository.findByMeeting(meeting);: 6월 8일 오후 7:49 기존 소스코드
+        MeetingUser meetingUser = new MeetingUser();
         meetingUser.setMeeting(meeting);
         meetingUser.setUser(user);
         meetingUserRepository.save(meetingUser);
